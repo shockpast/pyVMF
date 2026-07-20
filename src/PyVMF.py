@@ -1,7 +1,7 @@
+from __future__ import annotations
 from copy import deepcopy
 from random import randint
 from typing import List, Tuple, Generator
-from __future__ import annotations
 import re
 import sys
 import time
