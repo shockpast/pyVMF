@@ -1,6 +1,7 @@
-from PyVMF import *
 from random import randint
 from typing import List
+
+from PyVMF import *
 
 
 def triangulate_displacement(vmf: VMF, group: List[Solid], base_triangle: Solid = None, resolution=1, height=2):

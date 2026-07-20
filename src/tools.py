@@ -17,5 +17,3 @@ def num(s: str):
             return float(s)
         except ValueError:
             return str(s)
-
-

@@ -1,16 +1,16 @@
+from copy import deepcopy
+from random import randint
+from typing import List, Tuple, Generator
 from __future__ import annotations
 import re
-from copy import deepcopy
 import sys
 import time
 import math
 import operator
-from random import randint
-from tools import num
-from importer import *
-from typing import List, Tuple, Generator
 import warnings
 
+from .tools import num
+from .importer import *
 
 class Convert:
     """
