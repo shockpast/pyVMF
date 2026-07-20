@@ -491,11 +491,11 @@ class Vertex(Common):  # Vertex has to be above the Solid class (see: set_pos_ve
 class Solid(Common):
     """
     Corresponds to an individual solid just like in Hammer
-    
+
     :param dic: All the values to be initialized, if empty default values are used.
-    :type dic: :obj:`dict` 
+    :type dic: :obj:`dict`
     :param children: The :class:`Side`\'s and :class:`Editor` to be initialized
-    :type children: :obj:`list` 
+    :type children: :obj:`list`
     """
 
     NAME = "solid"
@@ -1792,6 +1792,83 @@ class Light(Entity):
                             "_quadratic_attn", "_zero_percent_distance", "spawnflags", "style", "origin"]
 
 
+class LightSpot(Light):
+    SUBNAME = "light_spot"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(LightSpot, self).__init__(dic, children)
+
+        self._cone = self.other.pop("_cone", 45)
+        self._inner_cone = self.other.pop("_inner_cone", 30)
+        self._exponent = self.other.pop("_exponent", 1)
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.pitch = self.other.pop("pitch", 0)
+
+        self.export_list = ["id", "classname", "_constant_attn", "_distance", "_fifty_percent_distance",
+                            "_hardfalloff", "_light", "_lightHDR", "_lightscaleHDR", "_linear_attn", "_quadratic_attn",
+                            "_zero_percent_distance", "spawnflags", "style",
+                            "_cone", "_inner_cone", "_exponent", "angles", "pitch", "origin"]
+
+
+class LightDirectional(Entity):
+    SUBNAME = "light_directional"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(LightDirectional, self).__init__(dic, children)
+
+        _light = self.other.pop("_light", "255 255 255 200")
+        self._light = Convert.string_to_color_light(_light)
+        self._lightHDR = self.other.pop("_lightHDR", "[-1 -1 -1 1]")
+        self._lightscaleHDR = self.other.pop("_lightscaleHDR", 1)
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.pitch = self.other.pop("pitch", 0)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "_light", "_lightHDR", "_lightscaleHDR",
+                            "angles", "pitch", "origin"]
+
+
+class InfoPlayerStart(Entity):
+    SUBNAME = "info_player_start"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(InfoPlayerStart, self).__init__(dic, children)
+
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "angles", "origin"]
+
+
+class InfoPlayerTerrorist(Entity):
+    SUBNAME = "info_player_terrorist"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(InfoPlayerTerrorist, self).__init__(dic, children)
+
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "angles", "origin"]
+
+
+class InfoPlayerCounterterrorist(Entity):
+    SUBNAME = "info_player_counterterrorist"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(InfoPlayerCounterterrorist, self).__init__(dic, children)
+
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "angles", "origin"]
+
+
 class PropStatic(Entity):
     SUBNAME = "prop_static"
 
@@ -1891,6 +1968,88 @@ class InfoOverlay(Entity):
                 self.sides = str(side.id)
             else:
                 self.sides += f" {side.id}"
+
+
+class AmbientGeneric(Entity):
+    SUBNAME = "ambient_generic"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(AmbientGeneric, self).__init__(dic, children)
+
+        self.health = self.other.pop("health", 10)
+        self.message = self.other.pop("message", "")
+        self.pitch = self.other.pop("pitch", 100)
+        self.radius = self.other.pop("radius", 1250)
+        self.source_entity_name = self.other.pop("source_entity_name", "")
+        self.spawnflags = self.other.pop("spawnflags", 0)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "health", "message", "pitch", "radius",
+                            "source_entity_name", "spawnflags", "origin"]
+
+
+class EnvSprite(Entity):
+    SUBNAME = "env_sprite"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(EnvSprite, self).__init__(dic, children)
+
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        self.framerate = self.other.pop("framerate", 10)
+        self.model = self.other.pop("model", "sprites/glow01.spr")
+        self.renderamt = self.other.pop("renderamt", 255)
+        rendercolor = self.other.pop("rendercolor", "255 255 255")
+        self.rendercolor = Convert.string_to_color(rendercolor)
+        self.renderfx = self.other.pop("renderfx", 0)
+        self.rendermode = self.other.pop("rendermode", 5)
+        self.scale = self.other.pop("scale", 1)
+        self.spawnflags = self.other.pop("spawnflags", 0)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "angles", "framerate", "model", "renderamt",
+                            "rendercolor", "renderfx", "rendermode", "scale", "spawnflags", "origin"]
+
+
+class PointSpotlight(Entity):
+    SUBNAME = "point_spotlight"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(PointSpotlight, self).__init__(dic, children)
+
+        angles = self.other.pop("angles", "0 0 0")
+        self.angles = Convert.string_to_vertex(angles)
+        rendercolor = self.other.pop("rendercolor", "255 255 255")
+        self.rendercolor = Convert.string_to_color(rendercolor)
+        self.renderamt = self.other.pop("renderamt", 255)
+        self.spawnflags = self.other.pop("spawnflags", 0)
+        self.spotlight_cone_length = self.other.pop("spotlight_cone_length", 0)
+        self.spotlight_fov = self.other.pop("spotlight_fov", 90)
+        self.spotlight_ping_min = self.other.pop("spotlight_ping_min", 0)
+        self.spotlight_ping_max = self.other.pop("spotlight_ping_max", 0)
+        self.spotlight_ping_start = self.other.pop("spotlight_ping_start", 0)
+        self.spotlight_cone_shape = self.other.pop("spotlight_cone_shape", 0)
+        self.spotlight_cone_name = self.other.pop("spotlight_cone_name", "")
+        self.spotlight_cone_exponent = self.other.pop("spotlight_cone_exponent", 0)
+        self.spotlight_cone_length = self.other.pop("spotlight_cone_length", 0)
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "angles", "rendercolor", "renderamt", "spawnflags",
+                            "spotlight_cone_length", "spotlight_fov", "spotlight_ping_min",
+                            "spotlight_ping_max", "spotlight_ping_start", "spotlight_cone_shape",
+                            "spotlight_cone_name", "spotlight_cone_exponent",
+                            "spotlight_cone_length", "origin"]
+
+
+class LogicAuto(Entity):
+    SUBNAME = "logic_auto"
+
+    def __init__(self, dic: dict = None, children: list = None):
+        super(LogicAuto, self).__init__(dic, children)
+
+        self.origin = self.other.pop("origin", Vertex())
+
+        self.export_list = ["id", "classname", "origin"]
 
 
 class Connections(Common):
@@ -2225,7 +2384,7 @@ class EntityGenerator:
     """
 
     @staticmethod
-    def light(origin: Vertex, color: Color, brightness: int = 200) -> Light:
+    def light(origin: Vertex, color: ColorLight) -> Light:
         """
         Generates a basic light
 
@@ -2240,11 +2399,125 @@ class EntityGenerator:
         """
         l = Light({"classname": Light.SUBNAME})
         l.origin = origin
-        l._light = ColorLight(*color.export(), brightness)
+        l._light = color
 
         l.editor = Editor()
 
         return l
+
+    @staticmethod
+    def light_spot(origin: Vertex, color: ColorLight, direction: Vertex = Vertex(0, 0, 0),
+                   cone: int = 45, inner_cone: int = 30) -> LightSpot:
+        """
+        Generates a basic light_spot
+
+        :param origin: The position of the spotlight in the world
+        :type origin: :class:`Vertex`
+        :param color: The color of the spotlight
+        :type color: :class:`ColorLight`
+        :param direction: The direction of the spotlight (pitch yaw roll)
+        :type direction: :class:`Vertex`
+        :param cone: Outer cone angle
+        :type cone: :obj:`int`
+        :param inner_cone: Inner cone angle
+        :type inner_cone: :obj:`int`
+        :return: A generated light_spot
+        :rtype: :class:`LightSpot`
+        """
+        s = LightSpot({"classname": LightSpot.SUBNAME})
+        s.origin = origin
+        s._light = color
+        s.angles = direction
+        s._cone = cone
+        s._inner_cone = inner_cone
+
+        s.editor = Editor()
+
+        return s
+
+    @staticmethod
+    def light_directional(origin: Vertex, color: ColorLight,
+                          direction: Vertex = Vertex(0, 0, 0)) -> LightDirectional:
+        """
+        Generates a basic light_directional
+
+        :param origin: The position of the directional light in the world
+        :type origin: :class:`Vertex`
+        :param color: The color of the light
+        :type color: :class:`ColorLight`
+        :param direction: The direction of the light (pitch yaw roll)
+        :type direction: :class:`Vertex`
+        :return: A generated light_directional
+        :rtype: :class:`LightDirectional`
+        """
+        d = LightDirectional({"classname": LightDirectional.SUBNAME})
+        d.origin = origin
+        d._light = color
+        d.angles = direction
+
+        d.editor = Editor()
+
+        return d
+
+    @staticmethod
+    def info_player_start(origin: Vertex, angle: Vertex = Vertex()) -> InfoPlayerStart:
+        """
+        Generates a basic info_player_start
+
+        :param origin: The spawn position
+        :type origin: :class:`Vertex`
+        :param angle: The direction the player faces when spawning
+        :type angle: :class:`Vertex`
+        :return: A generated info_player_start
+        :rtype: :class:`InfoPlayerStart`
+        """
+        s = InfoPlayerStart({"classname": InfoPlayerStart.SUBNAME})
+        s.origin = origin
+        s.angles = angle
+
+        s.editor = Editor()
+
+        return s
+
+    @staticmethod
+    def info_player_terrorist(origin: Vertex, angle: Vertex = Vertex()) -> InfoPlayerTerrorist:
+        """
+        Generates a basic info_player_terrorist
+
+        :param origin: The spawn position
+        :type origin: :class:`Vertex`
+        :param angle: The direction the player faces when spawning
+        :type angle: :class:`Vertex`
+        :return: A generated info_player_terrorist
+        :rtype: :class:`InfoPlayerTerrorist`
+        """
+        s = InfoPlayerTerrorist({"classname": InfoPlayerTerrorist.SUBNAME})
+        s.origin = origin
+        s.angles = angle
+
+        s.editor = Editor()
+
+        return s
+
+    @staticmethod
+    def info_player_counterterrorist(origin: Vertex, angle: Vertex = Vertex()) -> InfoPlayerCounterterrorist:
+        """
+        Generates a basic info_player_counterterrorist
+
+        :param origin: The spawn position
+        :type origin: :class:`Vertex`
+        :param angle: The direction the player faces when spawning
+        :type angle: :class:`Vertex`
+        :return: A generated info_player_counterterrorist
+        :rtype: :class:`InfoPlayerCounterterrorist`
+        """
+        s = InfoPlayerCounterterrorist({"classname": InfoPlayerCounterterrorist.SUBNAME})
+        s.origin = origin
+        s.angles = angle
+
+        s.editor = Editor()
+
+        return s
 
     @staticmethod
     def prop_static(origin: Vertex, model: str, angle: Vertex = Vertex(),
@@ -2319,6 +2592,99 @@ class EntityGenerator:
         s.editor = Editor()
 
         return s
+
+    @staticmethod
+    def ambient_generic(origin: Vertex, sound: str, volume: int = 10, pitch: int = 100) -> AmbientGeneric:
+        """
+        Generates a basic ambient_generic
+
+        :param origin: The position of the sound in the world
+        :type origin: :class:`Vertex`
+        :param sound: The path to the sound (ex: "ambient/atmosphere/ambient.wav")
+        :type sound: :obj:`str`
+        :param volume: Volume of the sound from 0 to 10
+        :type volume: :obj:`int`
+        :param pitch: Pitch of the sound (100 = default)
+        :type pitch: :obj:`int`
+        :return: A generated ambient_generic
+        :rtype: :class:`AmbientGeneric`
+        """
+        a = AmbientGeneric({"classname": AmbientGeneric.SUBNAME})
+        a.origin = origin
+        a.message = sound
+        a.health = volume
+        a.pitch = pitch
+
+        a.editor = Editor()
+
+        return a
+
+    @staticmethod
+    def env_sprite(origin: Vertex, sprite: str, scale: int = 1,
+                   color: Color = Color(255, 255, 255)) -> EnvSprite:
+        """
+        Generates a basic env_sprite
+
+        :param origin: The position of the sprite in the world
+        :type origin: :class:`Vertex`
+        :param sprite: The path to the sprite material (ex: "sprites/glow01.spr")
+        :type sprite: :obj:`str`
+        :param scale: Size of the sprite
+        :type scale: :obj:`int`
+        :param color: Color of the sprite
+        :type color: :class:`Color`
+        :return: A generated env_sprite
+        :rtype: :class:`EnvSprite`
+        """
+        s = EnvSprite({"classname": EnvSprite.SUBNAME})
+        s.origin = origin
+        s.model = sprite
+        s.scale = scale
+        s.rendercolor = color
+
+        s.editor = Editor()
+
+        return s
+
+    @staticmethod
+    def point_spotlight(origin: Vertex, color: Color = Color(255, 255, 255),
+                        brightness: int = 255, fov: int = 90) -> PointSpotlight:
+        """
+        Generates a basic point_spotlight
+
+        :param origin: The position of the spotlight in the world
+        :type origin: :class:`Vertex`
+        :param color: Color of the spotlight
+        :type color: :class:`Color`
+        :param brightness: Brightness of the spotlight
+        :type brightness: :obj:`int`
+        :param fov: Field of view of the spotlight
+        :type fov: :obj:`int`
+        :return: A generated point_spotlight
+        :rtype: :class:`PointSpotlight`
+        """
+        s = PointSpotlight({"classname": PointSpotlight.SUBNAME})
+        s.origin = origin
+        s.rendercolor = color
+        s.renderamt = brightness
+        s.spotlight_fov = fov
+
+        s.editor = Editor()
+
+        return s
+
+    @staticmethod
+    def logic_auto() -> LogicAuto:
+        """
+        Generates a basic logic_auto
+
+        :return: A generated logic_auto
+        :rtype: :class:`LogicAuto`
+        """
+        l = LogicAuto({"classname": LogicAuto.SUBNAME})
+        l.editor = Editor()
+
+        return l
 
 
 class VMF:
@@ -2528,8 +2894,26 @@ class VMF:
             classname = dic["classname"]
             if classname == Light.SUBNAME:
                 e = Light(dic, children)
+            elif classname == LightSpot.SUBNAME:
+                e = LightSpot(dic, children)
+            elif classname == LightDirectional.SUBNAME:
+                e = LightDirectional(dic, children)
             elif classname == PropStatic.SUBNAME:
                 e = PropStatic(dic, children)
+            elif classname == AmbientGeneric.SUBNAME:
+                e = AmbientGeneric(dic, children)
+            elif classname == EnvSprite.SUBNAME:
+                e = EnvSprite(dic, children)
+            elif classname == PointSpotlight.SUBNAME:
+                e = PointSpotlight(dic, children)
+            elif classname == LogicAuto.SUBNAME:
+                e = LogicAuto(dic, children)
+            elif classname == InfoPlayerStart.SUBNAME:
+                e = InfoPlayerStart(dic, children)
+            elif classname == InfoPlayerTerrorist.SUBNAME:
+                e = InfoPlayerTerrorist(dic, children)
+            elif classname == InfoPlayerCounterterrorist.SUBNAME:
+                e = InfoPlayerCounterterrorist(dic, children)
             else:
                 e = Entity(dic, children)
             self.entity.append(e)
